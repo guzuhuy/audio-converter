@@ -1,4 +1,6 @@
-const ytdlp = require('yt-dlp-exec');
+const ytdlpExec = require('yt-dlp-exec');
+const isAndroid = process.platform === 'android' || (process.env.PREFIX && process.env.PREFIX.includes('com.termux'));
+const ytdlp = isAndroid ? ytdlpExec.create('yt-dlp') : ytdlpExec;
 const fs = require('fs');
 const path = require('path');
 
