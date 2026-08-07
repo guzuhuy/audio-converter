@@ -1,0 +1,57 @@
+{
+  "1389687197447225495": {
+    "monthly": {
+      "2026-06": 8
+    },
+    "lastConversionAt": 1780949446978,
+    "plan": "premium-week",
+    "planExpiresAt": 1781554374091,
+    "planStartedAt": 1780949574091,
+    "lastFreePlanConversionAt": 1780949446978,
+    "loginOrder": 1,
+    "firstLoginAt": 1780949446978,
+    "username": "pak_huang",
+    "avatar": "2a79a151517496b97ef2aaa681d57351",
+    "discriminator": "0",
+    "claimedFreePremium": true,
+    "robloxApiKey": null,
+    "robloxTargetId": null,
+    "robloxTargetType": "user"
+  },
+  "1000064710969938041": {
+    "monthly": {},
+    "lastConversionAt": null,
+    "lastFreePlanConversionAt": null,
+    "plan": "premium-week",
+    "planExpiresAt": 1781599471643,
+    "planStartedAt": 1780994671643,
+    "loginOrder": 2,
+    "firstLoginAt": 1781003574361,
+    "username": "kyuna_una",
+    "avatar": "7b96267562bd70ce01849ebc8dd593a5",
+    "discriminator": "0",
+    "claimedFreePremium": true,
+    "robloxApiKey": null,
+    "robloxTargetId": null,
+    "robloxTargetType": "user"
+  },
+  "local-user-id": {
+    "monthly": {
+      "2026-08": 1
+    },
+    "lastConversionAt": 1786140026738,
+    "lastFreePlanConversionAt": null,
+    "plan": "premium-custom",
+    "planExpiresAt": 4939740026738,
+    "planStartedAt": 1786140026738,
+    "loginOrder": 3,
+    "firstLoginAt": 1786138814895,
+    "username": "LocalUser",
+    "avatar": null,
+    "discriminator": "0000",
+    "claimedFreePremium": true,
+    "robloxApiKey": null,
+    "robloxTargetId": null,
+    "robloxTargetType": "user"
+  }
+}

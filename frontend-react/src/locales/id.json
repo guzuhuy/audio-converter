@@ -1,0 +1,260 @@
+{
+  "topbar": {
+    "cta": "Mulai Sekarang",
+    "tagline": "Konversi & upload audio Roblox otomatis"
+  },
+  "nav": {
+    "features": "Fitur Utama",
+    "pricing": "Harga Paket",
+    "security": "Keamanan",
+    "converter": "Konverter Audio",
+    "upgrade": "Beli Premium",
+    "admin": "Panel Admin",
+    "login": "Masuk dengan Discord"
+  },
+  "hero": {
+    "title_html": "Konversi & Upload Audio ke <strong>Roblox</strong> secara <em>Otomatis</em>",
+    "sub": "Ambil audio dari YouTube & SoundCloud, konversi secara otomatis, lalu upload langsung ke akun Roblox Creator Anda dalam hitungan detik.",
+    "start": "Mulai Sekarang (Gratis)",
+    "learn": "Pelajari Fitur →",
+    "badge": "Layanan Audio Roblox #1",
+    "dashboard_cta": "Masuk ke Dashboard",
+    "login_cta": "Mulai Konversi Sekarang",
+    "pricing_cta": "Lihat Pilihan Harga"
+  },
+  "stats": {
+    "uploaded": "Audio Berhasil Diupload",
+    "uptime": "Uptime Sistem",
+    "users": "Pengguna Aktif"
+  },
+  "discord": {
+    "login": "Masuk dengan Discord"
+  },
+  "plans": {
+    "header": {
+      "title": "Pilihan Layanan Premium",
+      "sub": "Konversi dan upload audio ke Roblox tanpa batas dengan harga terjangkau"
+    },
+    "week": {
+      "title": "Akses Premium 7 Hari",
+      "period": "Per Minggu",
+      "cta": "Beli Paket Mingguan",
+      "cta_acquire": "Pilih Paket 7 Hari"
+    },
+    "month": {
+      "title": "Akses Premium 30 Hari",
+      "period": "Per Bulan",
+      "cta": "Beli Paket Bulanan",
+      "cta_acquire": "Pilih Paket 30 Hari"
+    },
+    "popular": "Paling Populer",
+    "features": {
+      "unlimited": "Konversi audio tanpa batas",
+      "auto_upload": "Upload otomatis ke akun Roblox",
+      "controls": "Kontrol kecepatan & amplifikasi volume",
+      "moderation": "Pantau status moderasi secara realtime",
+      "support": "Layanan bantuan prioritas"
+    },
+    "modal_title": "Beli Lisensi Premium",
+    "ticket_title": "Buka Tiket Pembelian",
+    "ticket_cta": "Hubungi Discord",
+    "ticket_desc": "Untuk membeli paket premium, silakan bergabung dengan server Discord kami dan buka tiket di saluran pembelian yang tersedia.",
+    "ticket_desc_1": "Untuk membeli plan ",
+    "ticket_desc_2": ", silakan masuk ke server Discord kami dan buka tiket pada channel pembelian yang tersedia."
+  },
+  "secure": {
+    "title": "Aman & Terpercaya",
+    "title_friendly": "Keamanan & Kinerja Layanan",
+    "card1_title": "Autentikasi Aman",
+    "card1_desc": "Autentikasi aman melalui Discord dengan penyimpanan kredensial yang terenkripsi.",
+    "card2_title": "Koneksi HTTPS Terenkripsi",
+    "card2_desc": "Semua data dikirim dengan enkripsi TLS 1.3 yang aman guna mencegah kebocoran data.",
+    "card3_title": "Pembayaran Aman",
+    "card3_desc": "Proses pembayaran aman melalui Midtrans yang mendukung QRIS dan berbagai metode transfer.",
+    "footer": "Baca <a href=\"/privacy\">Kebijakan Privasi</a> dan <a href=\"/terms\">Syarat Ketentuan</a> kami."
+  },
+  "footer": {
+    "copyright": "© 2025 V STUDIO Pak_Huang. Semua hak dilindungi."
+  },
+  "index": {
+    "title": "V STUDIO — Konverter Audio Roblox",
+    "url_label": "URL YouTube atau SoundCloud",
+    "url_placeholder": "Tempel link YouTube atau SoundCloud di sini...",
+    "drag_drop": "Seret & lepas file MP3 Anda di sini",
+    "browse": "Pilih File",
+    "max_file": "Maksimal 15MB",
+    "no_file": "Belum ada file yang dipilih",
+    "advanced": {
+      "title": "Pengaturan Lanjutan",
+      "summary": "Kecepatan: 2.5x, Volume: -6 dB, Durasi: 400s"
+    },
+    "speed": { "label": "Kecepatan" },
+    "amplify": { "label": "Volume (Amplifikasi)" },
+    "duration": { "label": "Durasi Maksimal (Detik)" },
+    "compensate": { "label": "Kompensasi untuk Kecepatan Pemutar" },
+    "player_speed": { "label": "Kecepatan Pemutar (contoh: 0.40)" },
+    "restore": { "label": "Kembalikan suara asli untuk preset kecepatan", "note": "Aktifkan opsi ini untuk otomatis menyesuaikan kecepatan agar suara audio tetap natural." },
+    "convert_button": "Konversi Audio",
+    "history": { "title": "RIWAYAT KONVERSI", "subtitle": "Lacak semua konversi audio dan unggahan Anda" },
+    "footer": { "privacy": "Kebijakan Privasi", "terms": "Syarat Ketentuan" }
+  },
+  "converter": {
+    "title": "Konverter Audio — V STUDIO",
+    "urlLabel": "Link YouTube atau SoundCloud",
+    "urlPlaceholder": "Tempel link YouTube atau SoundCloud di sini...",
+    "divider": "ATAU UGGAH FILE",
+    "uploadLabel": "Unggah File MP3",
+    "dropHint": "Tarik & lepas file MP3 Anda ke area ini",
+    "browseButton": "Pilih File",
+    "maxHint": "Maksimal 15MB",
+    "noFile": "Belum ada file yang dipilih",
+    "advancedTitle": "Pengaturan Lanjutan",
+    "speedLabel": "Kecepatan Audio",
+    "amplifyLabel": "Volume (Amplifikasi dB)",
+    "durationLabel": "Durasi Maksimal (Detik)",
+    "durationHint": "Audio akan otomatis dipotong setiap 400 detik untuk mempermudah pengunggahan.",
+    "compensateLabel": "Kompensasi kecepatan pemutar",
+    "playerSpeedLabel": "Kecepatan Pemutar",
+    "playerSpeedHint": "contoh: 0.40",
+    "restoreLabel": "Kembalikan suara asli untuk preset kecepatan",
+    "restoreNote": "Aktifkan opsi ini untuk otomatis menyesuaikan kecepatan agar suara tetap natural.",
+    "convertButton": "Mulai Konversi",
+    "historyTitle": "Riwayat Konversi Anda",
+    "historySubtitle": "Daftar audio yang baru saja Anda konversi (file disimpan sementara selama 10 menit)",
+    "footerText": "© 2025 V STUDIO Pak_Huang. Semua hak dilindungi.",
+    "backButton": "Kembali",
+    "logoutButton": "Keluar",
+    "active_session": "Akun Aktif",
+    "connected": "Terhubung",
+    "plan_free": "Pengguna Gratis",
+    "plan_premium": "Pengguna Premium",
+    "transcode_stats": "Statistik Konversi",
+    "system_license": "Paket Anda",
+    "cooldown_telemetry": "Waktu Tunggu (Cooldown)",
+    "ready": "Siap Digunakan",
+    "unlimited": "Tanpa Batas",
+    "loading_metadata": "Mengambil info audio...",
+    "or_upload_file": "Atau unggah file audio dari komputer Anda",
+    "no_file_selected": "Belum ada file yang dipilih",
+    "success_msg": "Konversi audio berhasil!",
+    "links_saved_msg": "Tautan unduhan telah ditambahkan ke riwayat di bawah.",
+    "uploading": "Mengunggah file...",
+    "processing": "Sedang memproses...",
+    "preset_slow": "Sangat Lambat",
+    "preset_default": "Lambat",
+    "preset_fast": "Normal",
+    "preset_faster": "Cepat",
+    "preset_ultra": "Sangat Cepat"
+  },
+  "admin": {
+    "title": "Panel Admin",
+    "login_help": "Masuk sebagai admin untuk melihat data pengguna dan mengatur paket.",
+    "detect_discord": "Deteksi Discord ID (pastikan sudah login terlebih dahulu)",
+    "username_placeholder": "Username",
+    "password_placeholder": "Password",
+    "login_button": "Masuk",
+    "plan_help": "Pilih paket yang sesuai untuk pengguna ini, lalu klik Simpan.",
+    "logout_button": "Keluar Admin",
+    "users_title": "Daftar Pengguna Discord",
+    "table": {
+      "user_id": "Discord ID",
+      "plan": "Paket",
+      "expiry": "Kadaluarsa",
+      "status": "Status",
+      "conversions": "Konversi (Bulan Ini)",
+      "last_conversion": "Konversi Terakhir",
+      "action": "Aksi"
+    }
+  },
+  "join": {
+    "title": "Bergabung dengan Komunitas Discord Kami",
+    "note": "Anda harus bergabung ke server Discord kami untuk menggunakan konverter ini. Silakan klik tombol gabung di bawah, lalu lakukan verifikasi keanggotaan.",
+    "invite": "Gabung Server Discord",
+    "verify": "Saya Sudah Bergabung - Verifikasi"
+  },
+  "privacy": {
+    "title": "Kebijakan Privasi",
+    "section": {
+      "information": {
+        "title": "Informasi yang Kami Kumpulkan",
+        "item1": "Informasi akun Discord (username, email, avatar) melalui OAuth",
+        "item2": "Kredensial akun Roblox (User ID, API Key) yang Anda berikan",
+        "item3": "Riwayat konversi audio dan preferensi unggahan",
+        "item4": "Informasi pembayaran yang diproses secara aman melalui Midtrans"
+      },
+      "usage": {
+        "title": "Bagaimana Kami Menggunakan Informasi Anda",
+        "item1": "Untuk mengautentikasi akun Anda melalui Discord OAuth",
+        "item2": "Untuk mengonversi dan mengunggah file audio ke akun Roblox Anda",
+        "item3": "Untuk memproses pembayaran langganan",
+        "item4": "Untuk menyediakan dukungan pelanggan"
+      },
+      "storage": {
+        "title": "Penyimpanan Data & Keamanan",
+        "text": "Data Anda disimpan dengan aman menggunakan koneksi database terenkripsi, AES-256 untuk kredensial, Cloudflare R2 untuk file, dan HTTPS."
+      },
+      "third_party": {
+        "title": "Layanan Pihak Ketiga",
+        "text": "Discord, Roblox, Midtrans, MongoDB Atlas, Cloudflare."
+      },
+      "rights": {
+        "title": "Hak Anda",
+        "text": "Akses, hapus, putuskan tautan akun Roblox, batalkan langganan, ekspor riwayat."
+      },
+      "contact": {
+        "title": "Kontak",
+        "text": "Discord: <a href=\"https://discord.gg/mMPMyPGq6W\">Bergabung dengan server kami</a>"
+      }
+    }
+  },
+  "terms": {
+    "title": "Syarat Ketentuan Layanan",
+    "section": {
+      "acceptance": {
+        "title": "Penerimaan Syarat",
+        "text": "Dengan mengakses V STUDIO PakHuang, Anda setuju dengan syarat ini. Jika tidak setuju, jangan gunakan layanan kami."
+      },
+      "description": {
+        "title": "Deskripsi Layanan",
+        "item1": "Konversi audio dari YouTube dan SoundCloud",
+        "item2": "Unggah otomatis ke Roblox melalui Open Cloud API resmi",
+        "item3": "Akses berbasis langganan ke fitur premium"
+      },
+      "responsibilities": {
+        "title": "Tanggung Jawab Pengguna",
+        "item1": "Hanya konversi dan unggah konten yang Anda miliki haknya",
+        "item2": "Patuhi Ketentuan Layanan dan Standar Komunitas Roblox",
+        "item3": "Jaga kredensial API Roblox Anda tetap aman dan pribadi"
+      },
+      "payments": {
+        "title": "Langganan & Pembayaran",
+        "text": "Langganan ditagih melalui Midtrans. Tidak ada pengembalian dana otomatis untuk penggunaan parsial. Batalkan kapan saja dari dashboard."
+      },
+      "availability": {
+        "title": "Ketersediaan Layanan & Tanggung Jawab",
+        "text": "Kami berupaya menjaga uptime 99% namun tidak menjamin. Kami tidak bertanggung jawab atas kegagalan pihak ketiga atau perubahan kebijakan."
+      },
+      "termination": {
+        "title": "Penghentian Akun",
+        "text": "Kami dapat menangguhkan atau menghentikan akun yang melanggar syarat, menyalahgunakan batas API, atau melakukan penipuan."
+      },
+      "contact": {
+        "title": "Kontak",
+        "text": "Discord: <a href=\"https://discord.gg/mMPMyPGq6W\">Bergabung dengan server kami</a>"
+      }
+    }
+  },
+  "test": {
+    "title": "Halaman Tes",
+    "heading": "Server berfungsi!",
+    "message": "Ini adalah halaman tes."
+  },
+  "claim_free_premium": {
+    "title": "Hadiah Selamat Datang! 🎁",
+    "desc": "Klaim Premium 1 Hari secara gratis! Nikmati durasi konversi tanpa batas, pengeras suara, kontrol kecepatan, dan upload otomatis langsung ke Roblox.",
+    "btn_claim": "Klaim 1 Hari Premium Sekarang",
+    "btn_close": "Mungkin Nanti",
+    "success": "Selamat! Paket Premium 1 hari Anda kini telah aktif.",
+    "error": "Gagal mengklaim paket premium gratis. Silakan coba beberapa saat lagi."
+  }
+}

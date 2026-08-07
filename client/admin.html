@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Audio Converter</title>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/4ZffCQHF/file-0000000037307207800c1b0df4ef447d.png" />
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#0a0f1c;color:#e8e4f0;padding:24px}
+    .card{background:#071024;padding:18px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);max-width:1100px;margin:0 auto}
+    input,select,button{padding:8px 10px;margin:6px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#e8e4f0}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:8px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.03)}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#e86f6f;color:#fff;font-weight:700}
+    .actions{display:flex;gap:8px;align-items:center}
+    .muted{color:#9d98b0;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+      <img src="https://i.ibb.co/4ZffCQHF/file-0000000037307207800c1b0df4ef447d.png" style="width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid rgba(201, 168, 76, 0.4);" alt="Logo">
+      <h2 data-i18n="admin.title" style="margin: 0;">Admin Panel</h2>
+    </div>
+    <div id="login-area">
+      <p class="muted" data-i18n="admin.login_help">Masuk sebagai admin untuk melihat data pengguna dan mengatur plan.</p>
+      <div>
+        <button id="detect-discord" style="margin-right:8px" data-i18n="admin.detect_discord">Detect Discord ID (login via Discord first)</button>
+        <input id="admin-username" placeholder="username" data-i18n-placeholder="admin.username_placeholder" />
+        <input id="admin-password" placeholder="password" type="password" data-i18n-placeholder="admin.password_placeholder" />
+        <button id="btn-login" data-i18n="admin.login_button">Login</button>
+      </div>
+      <div id="detect-result" class="muted" style="margin-top:6px"></div>
+      <div id="login-error" style="color:#e86f6f;margin-top:8px;display:none"></div>
+    </div>
+
+    <div id="panel" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <span class="badge" id="admin-badge">ADMIN</span>
+          <span style="margin-left:12px" id="admin-info" class="muted"></span>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:12px;" data-i18n="admin.plan_help">Gunakan dropdown untuk memilih plan, lalu klik Set Plan. Premium akan otomatis berlaku 1 minggu atau 1 bulan dan kadaluarsa otomatis.</p>
+        <div>
+          <button id="btn-logout" data-i18n="admin.logout_button">Logout</button>
+        </div>
+      </div>
+
+      <h3 style="margin-top:16px" data-i18n="admin.users_title">Discord Users</h3>
+      <table>
+        <thead>
+          <tr><th>Avatar</th><th>Username</th><th data-i18n="admin.table.user_id">User ID</th><th>Login Order</th><th data-i18n="admin.table.plan">Plan</th><th data-i18n="admin.table.expiry">Expiry</th><th data-i18n="admin.table.status">Status</th><th data-i18n="admin.table.conversions">Conversions This Month</th><th data-i18n="admin.table.last_conversion">Last Conversion</th><th data-i18n="admin.table.action">Action</th></tr>
+        </thead>
+        <tbody id="users-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/js/i18n.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

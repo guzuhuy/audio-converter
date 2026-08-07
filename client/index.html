@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V STUDIO — Roblox Audio Converter</title>
+<link rel="icon" type="image/png" href="https://i.ibb.co/4ZffCQHF/file-0000000037307207800c1b0df4ef447d.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Josefin+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05080f;
+    --surface: #0a0f1c;
+    --border: rgba(180,160,255,0.08);
+    --border2: rgba(180,160,255,0.15);
+    --gold: #c9a84c;
+    --gold2: #e8c97a;
+    --violet: #7c6ae8;
+    --cyan: #4dd9e8;
+    --text: #e8e4f0;
+    --muted: #7a7590;
+    --muted2: #9d98b0;
+    --green: #4de8b4;
+    --red: #e86f6f;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Josefin Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  #cursor-outer, #cursor-inner { position: fixed; z-index: 9999; pointer-events: none; transform: translate(-50%,-50%); }
+  #cursor-outer { width: 36px; height: 36px; border: 1px solid rgba(201,168,76,0.5); border-radius: 50%; transition: width .3s, height .3s, border-color .3s, background .3s; }
+  #cursor-inner { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(201,168,76,0.4); }
+
+  #bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+  .bg-aurora {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 50% at 10% 15%, rgba(124,106,232,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(201,168,76,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 50% 50%, rgba(77,217,232,0.03) 0%, transparent 60%);
+    animation: auroraShift 18s ease-in-out infinite alternate;
+  }
+
+  @keyframes auroraShift {
+    0%   { filter: hue-rotate(0deg) brightness(1); }
+    50%  { filter: hue-rotate(15deg) brightness(1.08); }
+    100% { filter: hue-rotate(-10deg) brightness(0.95); }
+  }
+
+  .grid-lines {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(180,160,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(180,160,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 46px;
+    background: rgba(5,8,15,0.85); border-bottom: 1px solid rgba(201,168,76,0.12);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
+    backdrop-filter: blur(20px) saturate(1.5);
+  }
+
+  .topbar-left { display: flex; align-items: center; gap: 16px; }
+
+  .topbar-cta {
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: #05080f; font-weight: 700; font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; padding: 7px 18px; border-radius: 3px;
+    text-decoration: none; box-shadow: 0 2px 20px rgba(201,168,76,0.2);
+    transition: all .3s; cursor: pointer;
+  }
+
+  .topbar-cta:hover { box-shadow: 0 4px 30px rgba(201,168,76,0.4); transform: translateY(-1px); }
+
+  .lang-toggle { display: flex; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border2); border-radius: 3px; }
+  .lang-btn { background: none; border: none; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 7px 14px; transition: color .2s, background .2s; font-family: 'Josefin Sans', sans-serif; cursor: pointer; }
+  .lang-btn.active { background: rgba(201,168,76,0.12); color: var(--gold); }
+
+  nav {
+    position: fixed; top: 46px; left: 0; right: 0; z-index: 100; height: 68px;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
+    background: rgba(5,8,15,0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border);
+  }
+
+  .logo { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 26px; letter-spacing: 3px; color: var(--gold2); text-transform: uppercase; }
+
+  .nav-links { display: flex; gap: 40px; align-items: center; }
+  .nav-links a { color: var(--muted2); text-decoration: none; font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; transition: color .3s; position: relative; }
+  .nav-links a:hover { color: var(--gold2); }
+
+  .hero {
+    position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: calc(46px + 68px + 60px) 5% 80px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(44px, 7vw, 92px);
+    line-height: 1.08; letter-spacing: -1px; max-width: 820px; margin-bottom: 28px;
+    animation: fadeUp .9s .1s ease both; color: var(--text);
+  }
+
+  h1 strong { font-weight: 700; background: linear-gradient(135deg, var(--gold), var(--gold2)); background-size: 200% auto; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 4s linear infinite; }
+
+  @keyframes shimmer { to { background-position: 200% center; } }
+
+  .hero-sub {
+    font-size: 14px; font-weight: 300; letter-spacing: 1.5px; color: var(--muted2);
+    max-width: 500px; line-height: 2; margin-bottom: 52px; animation: fadeUp .9s .2s ease both;
+  }
+
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; animation: fadeUp .9s .3s ease both; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: #05080f; font-weight: 700; font-size: 11px; letter-spacing: 2.5px;
+    text-transform: uppercase; padding: 16px 40px; border-radius: 3px; text-decoration: none;
+    box-shadow: 0 4px 30px rgba(201,168,76,0.25); transition: all .3s; cursor: pointer;
+    position: relative; overflow: hidden; border: none;
+  }
+
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(201,168,76,0.4); }
+
+  .btn-secondary {
+    background: transparent; border: 1px solid var(--border2); color: var(--muted2);
+    font-weight: 600; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+    padding: 16px 36px; border-radius: 3px; text-decoration: none; transition: all .3s;
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover { border-color: rgba(201,168,76,0.4); color: var(--gold2); box-shadow: 0 4px 20px rgba(201,168,76,0.1); }
+
+  .stats-bar {
+    background: rgba(10,15,28,0.9); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    position: relative; z-index: 1; backdrop-filter: blur(10px);
+  }
+
+  .stats-inner { max-width: 900px; margin: 0 auto; padding: 40px 5%; display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; gap: 24px; }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 44px; font-weight: 700; background: linear-gradient(135deg, var(--gold), var(--gold2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .stat-label { font-size: 10px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; }
+
+  section { position: relative; z-index: 1; padding: 100px 5%; }
+
+  .plans { background: var(--bg); }
+  .plans-inner { max-width: 820px; margin: 0 auto; }
+  .plans-header { text-align: center; margin-bottom: 60px; }
+  .plans-header h2 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(32px, 4vw, 52px); margin-bottom: 18px; }
+  .plans-header p { color: var(--muted2); font-size: 13px; }
+
+  .plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+
+  .plan-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 40px 36px; position: relative; transition: all .4s;
+  }
+
+  .plan-card:hover { transform: translateY(-5px); border-color: var(--border2); }
+  .plan-card.popular { border-color: rgba(201,168,76,0.3); background: linear-gradient(160deg, rgba(201,168,76,0.04) 0%, var(--surface) 50%); }
+
+  .popular-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #05080f;
+    font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 20px; border-radius: 2px; white-space: nowrap;
+  }
+
+  .plan-price { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 700; letter-spacing: -2px; margin-bottom: 4px; }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 14px; margin: 28px 0; }
+  .plan-features li { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--muted2); }
+  .plan-features li::before { content: '✦'; color: var(--gold); font-size: 10px; }
+
+  .plan-btn {
+    display: block; width: 100%; padding: 15px; border-radius: 3px; text-align: center;
+    font-weight: 700; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    text-decoration: none; transition: all .3s; border: none; cursor: pointer;
+    font-family: 'Josefin Sans', sans-serif;
+  }
+
+  .plan-btn.filled {
+    background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #05080f;
+    box-shadow: 0 4px 20px rgba(201,168,76,0.2);
+  }
+
+  .plan-btn.filled:hover { box-shadow: 0 8px 30px rgba(201,168,76,0.35); transform: translateY(-1px); }
+
+  footer { position: relative; z-index: 1; background: var(--bg); border-top: 1px solid var(--border); padding: 60px 5%; text-align: center; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 28px; letter-spacing: 6px; text-transform: uppercase; background: linear-gradient(135deg, var(--gold), var(--gold2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 14px; }
+  footer p { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+  .btn-discord-login {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #05080f; font-weight: 700; font-size: 11px; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 10px 22px; border-radius: 999px; border: none;
+    transition: all .3s; box-shadow: 0 8px 24px rgba(201,168,76,0.25);
+    font-family: 'Josefin Sans', sans-serif; cursor: pointer;
+  }
+
+  .btn-discord-login:hover { background: linear-gradient(135deg, #e8c97a, #c9a84c); box-shadow: 0 10px 30px rgba(201,168,76,0.35); transform: translateY(-1px); }
+
+  .nav-actions { display: flex; align-items: center; gap: 12px; }
+  .profile-badge {
+    display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 12px;
+  }
+  .profile-badge img {
+    width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.12);
+  }
+  .profile-text { display: flex; flex-direction: column; min-width: 0; }
+  .profile-text span:first-child { font-size: 12px; font-weight: 700; color: var(--text); }
+  .profile-text span:last-child { font-size: 11px; color: var(--muted2); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+  @media(max-width:680px){
+    .topbar { display: none !important; }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      padding: 0 4%;
+      flex-direction: row !important;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+    }
+    .logo {
+      font-size: 16px;
+      letter-spacing: 1.5px;
+    }
+    .logo img {
+      width: 28px !important;
+      height: 28px !important;
+    }
+    .logo span span {
+      display: none !important; /* Hide "/ Pak_Huang" to fit the line */
+    }
+    .nav-links { display: none !important; }
+    .nav-actions { width: auto; justify-content: flex-end; }
+    .btn-discord-login {
+      padding: 8px 16px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      width: auto;
+      box-shadow: 0 4px 15px rgba(201,168,76,0.2);
+    }
+    .profile-badge {
+      padding: 5px 10px;
+      gap: 8px;
+    }
+    .profile-badge img {
+      width: 26px;
+      height: 26px;
+    }
+    .profile-text {
+      display: none !important; /* Hide profile text on mobile navbar to save space */
+    }
+    .btn-secondary {
+      padding: 5px 10px;
+      font-size: 9px;
+    }
+    h1 { font-size: 32px !important; line-height: 1.2; }
+    .hero-sub { font-size: 12px; margin-bottom: 28px; line-height: 1.6; }
+    .hero { padding: 90px 4% 50px !important; }
+    .plans-grid { grid-template-columns: 1fr; gap: 20px; }
+    .stats-inner { grid-template-columns: 1fr; gap: 18px; padding: 24px 5%; }
+    .plan-card { padding: 30px 20px; }
+    .stat-num { font-size: 32px; }
+  }
+
+    /* Secure & Trusted section */
+    .secure-section { background: transparent; padding-top: 40px; padding-bottom: 40px; }
+    .secure-header { text-align: center; margin-bottom: 28px; }
+    .secure-header h2 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 28px; margin-bottom: 8px; }
+    .secure-header p { color: var(--muted2); font-size: 13px; max-width: 820px; margin: 0 auto; }
+    .secure-header p a { color: var(--cyan); text-decoration: underline; margin: 0 6px; }
+    .secure-cards { max-width: 980px; margin: 36px auto 0; display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .secure-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 26px; min-height: 120px; display:flex; gap:18px; align-items:flex-start; }
+    .secure-icon { width:44px; height:44px; border-radius:10px; background: linear-gradient(135deg, rgba(77,217,232,0.08), rgba(124,106,232,0.04)); display:flex; align-items:center; justify-content:center; flex:0 0 44px; }
+    .secure-icon svg { width:22px; height:22px; fill: var(--cyan); }
+    .secure-card h3 { font-size: 15px; margin: 0 0 4px 0; color: var(--text); }
+    .secure-card p { color: var(--muted2); font-size: 13px; line-height: 1.6; margin:0; }
+    @media(max-width:980px){ .secure-cards { grid-template-columns: 1fr; } .secure-card{align-items:center;} }
+    .secure-cards { max-width: 980px; margin: 36px auto 0; display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .secure-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 26px; min-height: 120px; }
+    .secure-card h3 { font-size: 15px; margin-bottom: 8px; color: var(--text); }
+    .secure-card p { color: var(--muted2); font-size: 13px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div id="cursor-outer"></div>
+<div id="cursor-inner"></div>
+<canvas id="bg-canvas"></canvas>
+<div class="bg-aurora"></div>
+<div class="grid-lines"></div>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="#plans" class="topbar-cta" data-i18n="topbar.cta">Mulai Sekarang</a>
+    <span style="font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase;" data-i18n="topbar.tagline">✦ Konversi & upload audio Roblox otomatis</span>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn" id="btn-id" onclick="setLang('id')">ID</button>
+    <div style="width: 1px; height: 16px; background: var(--border2);"></div>
+    <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<nav>
+  <div class="logo" style="display: flex; align-items: center; gap: 12px;">
+    <img src="https://i.ibb.co/4ZffCQHF/file-0000000037307207800c1b0df4ef447d.png" style="width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid rgba(201, 168, 76, 0.4);" alt="Logo" />
+    <span>V STUDIO <span style="font-family: 'Josefin Sans'; font-weight: 300; font-size: 11px; letter-spacing: 3px; color: var(--muted); margin-left: 8px; text-transform: uppercase;">/ Pak_Huang</span></span>
+  </div>
+    <div class="nav-links">
+    <a href="#plans" data-i18n="nav.features">Fitur</a>
+    <a href="#plans" data-i18n="nav.pricing">Harga</a>
+    <a href="#plans" data-i18n="nav.security">Keamanan</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-discord-login" id="discord-login-btn" onclick="handleDiscordLogin()">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.013.043.031.057a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+      <span id="discord-btn-text" data-i18n="discord.login">Masuk dengan Discord</span>
+    </button>
+    <div class="profile-badge" id="landing-profile-badge" style="display:none;">
+      <img id="landing-avatar" src="" alt="Avatar">
+      <div class="profile-text">
+        <span id="landing-username"></span>
+        <span id="landing-discr"></span>
+      </div>
+      <button type="button" class="btn-secondary" id="landing-logout-btn">Keluar</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div style="display: inline-flex; align-items: center; gap: 12px; color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 28px; animation: fadeUp .9s ease both;">
+    <div style="width: 5px; height: 5px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px var(--gold);"></div>
+    <span data-i18n="hero.badge">Layanan Audio Roblox #1</span>
+    <div style="width: 5px; height: 5px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px var(--gold);"></div>
+  </div>
+  <h1 data-i18n-html="hero.title_html">Konversi & Upload Audio ke <strong>Roblox</strong> <em style="font-style: italic; font-weight: 300;">Otomatis</em></h1>
+  <p class="hero-sub" data-i18n="hero.sub">Ambil audio dari YouTube & SoundCloud, konversi, dan upload langsung ke akun Roblox Creator kamu — dalam hitungan detik.</p>
+  <div class="hero-actions">
+    <a href="#plans" class="btn-primary" data-i18n="hero.start">Mulai Gratis</a>
+    <a href="#plans" class="btn-secondary" data-i18n="hero.learn">Pelajari Fitur →</a>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div><div class="stat-num">10K+</div><div class="stat-label" data-i18n="stats.uploaded">Audio Diupload</div></div>
+    <div><div class="stat-num">99%</div><div class="stat-label" data-i18n="stats.uptime">Uptime Layanan</div></div>
+    <div><div class="stat-num">500+</div><div class="stat-label" data-i18n="stats.users">Pengguna Aktif</div></div>
+  </div>
+</div>
+
+<section class="plans" id="plans">
+  <div class="plans-inner">
+    <div class="plans-header">
+      <h2 data-i18n="plans.header.title">Pilih Plan Anda</h2>
+      <p data-i18n="plans.header.sub">Konversi dan upload audio ke Roblox dengan harga terjangkau</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div style="font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;" data-i18n="plans.week.period">Per Minggu</div>
+        <div class="plan-price">70K <span style="font-size: 16px; font-weight: 400; color: var(--muted);">/ minggu</span></div>
+        <hr style="border: none; border-top: 1px solid var(--border); margin: 28px 0;">
+        <ul class="plan-features">
+          <li data-i18n="plans.features.unlimited">Konversi audio tanpa batas</li>
+          <li data-i18n="plans.features.auto_upload">Upload otomatis ke Roblox</li>
+          <li data-i18n="plans.features.controls">Kontrol kecepatan & amplifikasi</li>
+          <li data-i18n="plans.features.moderation">Pantau status moderasi</li>
+          <li data-i18n="plans.features.support">Dukungan prioritas</li>
+        </ul>
+        <button class="plan-btn filled" type="button" onclick="handleConverterAccess()" data-i18n="plans.week.cta">Pilih Mingguan</button>
+      </div>
+      <div class="plan-card popular">
+        <div class="popular-badge" data-i18n="plans.popular">⭐ Paling Populer</div>
+        <div style="font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;" data-i18n="plans.month.period">Per Bulan</div>
+        <div class="plan-price" style="background: linear-gradient(135deg, var(--gold), var(--gold2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">130K <span style="font-size: 16px; font-weight: 400; -webkit-text-fill-color: var(--muted); color: var(--muted);">/ bulan</span></div>
+        <hr style="border: none; border-top: 1px solid var(--border); margin: 28px 0;">
+        <ul class="plan-features">
+          <li data-i18n="plans.features.unlimited">Konversi audio tanpa batas</li>
+          <li data-i18n="plans.features.auto_upload">Upload otomatis ke Roblox</li>
+          <li data-i18n="plans.features.controls">Kontrol kecepatan & amplifikasi</li>
+          <li data-i18n="plans.features.moderation">Pantau status moderasi</li>
+          <li data-i18n="plans.features.support">Dukungan prioritas</li>
+        </ul>
+        <button class="plan-btn filled" type="button" onclick="handleConverterAccess()" data-i18n="plans.month.cta">Pilih Bulanan</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="secure-section" id="security">
+  <div class="secure-header">
+    <h2 data-i18n="secure.title">SECURE &amp; TRUSTED</h2>
+  </div>
+  <div class="secure-cards">
+    <div class="secure-card">
+      <div class="secure-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L3 5v6c0 5 3.7 9.7 9 11 5.3-1.3 9-6 9-11V5l-9-4zM11 14l-3-3 1.4-1.4L11 11.2l4.6-4.6L17 8l-6 6z"/></svg>
+      </div>
+      <div>
+        <h3 data-i18n="secure.card1_title">Secure Authentication</h3>
+        <p data-i18n="secure.card1_desc">OAuth 2.0 authentication via Discord with AES-256 encrypted credential storage</p>
+      </div>
+    </div>
+    <div class="secure-card">
+      <div class="secure-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a9 9 0 100 18 9 9 0 000-18zm1 10h4v2h-6V7h2v6z"/></svg>
+      </div>
+      <div>
+        <h3 data-i18n="secure.card2_title">HTTPS Encrypted</h3>
+        <p data-i18n="secure.card2_desc">All data transmitted with TLS 1.3 encryption and HSTS security headers</p>
+      </div>
+    </div>
+    <div class="secure-card">
+      <div class="secure-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2 7h20v2H2V7zm2 4h16v8H4v-8zm6 2v4h4v-4h-4z"/></svg>
+      </div>
+      <div>
+        <h3 data-i18n="secure.card3_title">Secure Payments</h3>
+        <p data-i18n="secure.card3_desc">PCI DSS compliant payment processing via Midtrans with QRIS support</p>
+      </div>
+    </div>
+    <div class="secure-footer" data-i18n-html="secure.footer">Read our <a href="/privacy.html">Privacy Policy</a> and <a href="/terms.html">Terms of Service</a>.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo" style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+    <img src="https://i.ibb.co/4ZffCQHF/file-0000000037307207800c1b0df4ef447d.png" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(201, 168, 76, 0.4);" alt="Logo" />
+    <span>V Studio</span>
+  </div>
+  <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; color: var(--muted); font-size: 10px; letter-spacing: 4px;">✦ ✦ ✦</div>
+  <p data-i18n="footer.copyright">© 2025 V STUDIO Pak_Huang. Semua hak dilindungi.</p>
+</footer>
+<script src="/js/i18n.js"></script>
+<script>
+const BACKEND_URL = '';
+
+const cursorOuter = document.getElementById('cursor-outer');
+const cursorInner = document.getElementById('cursor-inner');
+let mouseX = 0, mouseY = 0, outerX = 0, outerY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursorInner.style.left = mouseX + 'px';
+  cursorInner.style.top = mouseY + 'px';
+});
+
+function animateCursor() {
+  outerX += (mouseX - outerX) * 0.12;
+  outerY += (mouseY - outerY) * 0.12;
+  cursorOuter.style.left = outerX + 'px';
+  cursorOuter.style.top = outerY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursorOuter.style.width = '52px';
+    cursorOuter.style.height = '52px';
+    cursorOuter.style.borderColor = 'rgba(201,168,76,0.8)';
+    cursorOuter.style.background = 'rgba(201,168,76,0.06)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursorOuter.style.width = '36px';
+    cursorOuter.style.height = '36px';
+    cursorOuter.style.borderColor = 'rgba(201,168,76,0.5)';
+    cursorOuter.style.background = 'transparent';
+  });
+  });
+
+const particles = [];
+for (let i = 0; i < 120; i++) {
+  particles.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 1.2 + 0.2,
+    opacity: Math.random() * 0.6 + 0.1,
+    speed: Math.random() * 0.15 + 0.03,
+    twinkleSpeed: Math.random() * 0.02 + 0.005,
+    twinkleOffset: Math.random() * Math.PI * 2,
+    gold: Math.random() > 0.7
+  });
+}
+
+const orbs = [
+  { x: 0.2, y: 0.3, r: 180, color: 'rgba(124,106,232,', speed: 0.0008, phase: 0 },
+  { x: 0.8, y: 0.7, r: 150, color: 'rgba(201,168,76,', speed: 0.0012, phase: 1 },
+  { x: 0.5, y: 0.5, r: 200, color: 'rgba(77,217,232,', speed: 0.0006, phase: 2 },
+];
+
+let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+let t = 0;
+function drawBackground() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  orbs.forEach(orb => {
+    const cx = canvas.width * orb.x + Math.sin(t * orb.speed + orb.phase) * 80;
+    const cy = canvas.height * orb.y + Math.cos(t * orb.speed * 0.7 + orb.phase) * 60;
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, orb.r);
+    grad.addColorStop(0, orb.color + '0.04)');
+    grad.addColorStop(1, orb.color + '0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, orb.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  const mgrad = ctx.createRadialGradient(mx, my, 0, mx, my, 200);
+  mgrad.addColorStop(0, 'rgba(201,168,76,0.03)');
+  mgrad.addColorStop(1, 'rgba(201,168,76,0)');
+  ctx.fillStyle = mgrad;
+  ctx.beginPath();
+  ctx.arc(mx, my, 200, 0, Math.PI * 2);
+  ctx.fill();
+
+  particles.forEach(p => {
+    const tw = Math.sin(t * p.twinkleSpeed + p.twinkleOffset) * 0.4 + 0.6;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${p.gold ? '201,168,76' : '200,195,230'},${p.opacity * tw})`;
+    ctx.fill();
+    p.y -= p.speed;
+    if (p.y < -2) {
+      p.y = canvas.height + 2;
+      p.x = Math.random() * canvas.width;
+    }
+  });
+
+  t++;
+  requestAnimationFrame(drawBackground);
+}
+
+drawBackground();
+
+// Check authentication status on page load
+function handleDiscordLogin() {
+  window.location.href = BACKEND_URL + '/auth/discord';
+}
+
+function handleDiscordLogout() {
+  window.location.href = BACKEND_URL + '/auth/logout';
+}
+
+async function fetchAuthUser() {
+  try {
+    const response = await fetch(BACKEND_URL + '/auth/user', { credentials: 'include' });
+    const data = await response.json();
+    return data.success && data.user ? data.user : null;
+  } catch (err) {
+    console.error('Error fetching auth user:', err);
+    return null;
+  }
+}
+
+async function handleConverterAccess() {
+  const user = await fetchAuthUser();
+  if (user) {
+    window.location.href = 'converter.html';
+  } else {
+    window.location.href = BACKEND_URL + '/auth/discord';
+  }
+}
+
+async function checkAuthStatus() {
+  try {
+    const response = await fetch(BACKEND_URL + '/auth/user', { credentials: 'include' });
+    const data = await response.json();
+    const profileBadge = document.getElementById('landing-profile-badge');
+    const landingUsername = document.getElementById('landing-username');
+    const landingDiscr = document.getElementById('landing-discr');
+    const landingAvatar = document.getElementById('landing-avatar');
+    const logoutBtn = document.getElementById('landing-logout-btn');
+    const btnText = document.getElementById('discord-btn-text');
+    const discordBtn = document.getElementById('discord-login-btn');
+
+    if (data.success && data.user) {
+      if (profileBadge) profileBadge.style.display = 'flex';
+      if (landingUsername) landingUsername.textContent = data.user.username || 'Discord User';
+      if (landingDiscr) landingDiscr.textContent = `#${data.user.discriminator || '0000'}`;
+      if (landingAvatar) landingAvatar.src = data.user.avatar ? `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png?size=80` : 'https://via.placeholder.com/80';
+      if (logoutBtn) logoutBtn.addEventListener('click', handleDiscordLogout);
+      if (btnText) btnText.textContent = 'Buka Converter';
+      if (discordBtn) discordBtn.onclick = handleConverterAccess;
+    } else {
+      if (profileBadge) profileBadge.style.display = 'none';
+      if (btnText) btnText.textContent = 'Masuk dengan Discord';
+      if (discordBtn) discordBtn.onclick = handleDiscordLogin;
+    }
+  } catch (err) {
+    console.error('Error checking auth status:', err);
+    document.getElementById('discord-login-btn').onclick = handleDiscordLogin;
+  }
+}
+
+// Check auth status when page loads
+document.addEventListener('DOMContentLoaded', checkAuthStatus);
+</script>
+
+</body>
+</html>

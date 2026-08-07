@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="title">Audio Converter — V STUDIO</title>
+<link rel="icon" type="image/png" href="https://i.ibb.co/4ZffCQHF/file-0000000037307207800c1b0df4ef447d.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Josefin+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05080f;
+    --surface: #0a0f1c;
+    --border: rgba(180,160,255,0.08);
+    --border2: rgba(180,160,255,0.15);
+    --gold: #c9a84c;
+    --gold2: #e8c97a;
+    --text: #e8e4f0;
+    --muted: #7a7590;
+    --muted2: #9d98b0;
+    --green: #4de8b4;
+    --red: #e86f6f;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Josefin Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  #cursor-outer, #cursor-inner { position: fixed; z-index: 9999; pointer-events: none; transform: translate(-50%,-50%); }
+  #cursor-outer { width: 36px; height: 36px; border: 1px solid rgba(201,168,76,0.5); border-radius: 50%; transition: width .3s, height .3s, border-color .3s, background .3s; }
+  #cursor-inner { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(201,168,76,0.4); }
+
+  #bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+  .bg-aurora {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 50% at 10% 15%, rgba(124,106,232,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(201,168,76,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 50% 50%, rgba(77,217,232,0.03) 0%, transparent 60%);
+    animation: auroraShift 18s ease-in-out infinite alternate;
+  }
+
+  .grid-lines {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(180,160,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(180,160,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  @keyframes auroraShift {
+    0%   { filter: hue-rotate(0deg) brightness(1); }
+    50%  { filter: hue-rotate(15deg) brightness(1.08); }
+    100% { filter: hue-rotate(-10deg) brightness(0.95); }
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 68px;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
+    background: rgba(5,8,15,0.85); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .logo { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 24px; color: var(--gold); text-transform: uppercase; }
+  .nav-end { display: flex; align-items: center; gap: 14px; }
+  .lang-toggle { display: inline-flex; align-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; }
+  .lang-btn { background: transparent; border: none; color: var(--text); padding: 10px 14px; cursor: pointer; font-size: 12px; letter-spacing: .7px; text-transform: uppercase; opacity: 0.65; transition: opacity .2s, background .2s; }
+  .lang-btn.active { background: rgba(255,255,255,0.08); opacity: 1; }
+  .btn-back { background: linear-gradient(135deg, var(--gold), var(--gold2)); border: none; border-radius: 999px; color: #05080f; padding: 12px 22px; cursor: pointer; font-weight: 700; }
+
+  .container { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 120px 5% 60px; }
+
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 300; margin-bottom: 12px; }
+  .subtitle { color: var(--muted2); font-size: 14px; margin-bottom: 36px; max-width: 720px; line-height: 1.8; }
+
+  .card {
+    background: rgba(10,15,28,0.92);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 22px;
+    padding: 34px;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.18);
+    backdrop-filter: blur(18px);
+  }
+
+  .field-group { margin-bottom: 22px; }
+  .field-group label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin-bottom: 10px; }
+  .field-group input[type="url"], .field-group input[type="number"], .field-group input[type="text"] {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-size: 14px;
+    transition: border-color .3s, background .3s;
+  }
+
+  .field-group input:focus { outline: none; border-color: rgba(201,168,76,0.4); background: rgba(255,255,255,0.08); }
+
+  .youtube-preview {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 22px;
+  }
+
+  .preview-content {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .preview-thumb {
+    flex: 0 0 220px;
+    min-width: 160px;
+    max-height: 180px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.15);
+  }
+
+  .preview-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .preview-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .preview-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .preview-meta {
+    color: var(--muted2);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .preview-link a {
+    color: var(--gold2);
+    text-decoration: none;
+    word-break: break-word;
+    font-size: 13px;
+  }
+
+  .preview-settings {
+    color: var(--muted2);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .preview-loading {
+    padding: 18px;
+    color: var(--text);
+    font-size: 14px;
+  }
+
+  .divider { text-align: center; color: var(--muted2); letter-spacing: 3px; margin: 18px 0; font-size: 12px; }
+
+  .upload-group .drop-zone {
+    border: 1px dashed rgba(255,255,255,0.18);
+    border-radius: 18px;
+    padding: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: border-color .3s, background .3s;
+    cursor: pointer;
+  }
+
+  .upload-group .drop-zone.dragover { border-color: rgba(201,168,76,0.7); background: rgba(201,168,76,0.06); }
+
+  .drop-content { text-align: center; color: var(--muted2); display: grid; gap: 10px; }
+  .ghost { border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); color: var(--text); border-radius: 999px; padding: 12px 22px; cursor: pointer; transition: background .3s, transform .3s; }
+  .ghost:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+  .hint { font-size: 12px; color: var(--muted); }
+  .file-name { margin-top: 14px; font-size: 13px; color: var(--muted2); }
+
+  .advanced-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px; margin-bottom: 24px; }
+
+  .advanced-header { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 22px; }
+  .advanced-header span:first-child { color: var(--text); font-weight: 700; }
+  .advanced-summary { color: var(--muted2); font-size: 13px; }
+
+  .presets { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+  .preset-button { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: var(--text); padding: 10px 18px; border-radius: 999px; cursor: pointer; transition: all .3s; font-size: 13px; }
+  .preset-button.active { background: linear-gradient(135deg, rgba(201,168,76,0.18), rgba(201,168,76,0.08)); border-color: rgba(201,168,76,0.4); color: var(--gold); }
+
+  .slider-group { margin-bottom: 18px; }
+  .slider-group label { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; color: var(--muted2); margin-bottom: 12px; }
+  .slider-group input[type="range"] { width: 100%; accent-color: var(--gold); }
+
+  .option-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+  .toggle-label { display: inline-flex; align-items: center; gap: 12px; color: var(--muted2); font-size: 13px; cursor: pointer; }
+  .toggle-label input { width: auto; height: auto; accent-color: var(--gold); }
+
+  .player-speed-control { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .player-speed-control label { color: var(--muted2); font-size: 13px; }
+  .player-speed-control input[type="number"] {
+    width: 110px;
+    min-width: 110px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+  }
+
+  .restore-note { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  .primary { width: 100%; display: inline-flex; justify-content: center; align-items: center; background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #05080f; border: none; border-radius: 14px; padding: 16px; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; transition: transform .3s, box-shadow .3s, background .3s, opacity .3s; }
+  .primary:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(201,168,76,0.18); }
+  .primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; background: linear-gradient(135deg, var(--gold), var(--gold2)); }
+  .primary:disabled:hover { transform: none; box-shadow: none; }
+
+  .status {
+    display: block;
+    padding: 16px 18px;
+    border-radius: 14px;
+    margin-top: 24px;
+    font-size: 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text);
+  }
+  .status.success { background: rgba(77,232,180,0.1); border-color: rgba(77,232,180,0.3); color: var(--green); }
+  .status.error { background: rgba(232,111,111,0.1); border-color: rgba(232,111,111,0.3); color: var(--red); }
+  .status.info { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.16); color: var(--text); }
+  .status.upload { background: rgba(69,164,255,0.08); border-color: rgba(69,164,255,0.25); color: #a3d5ff; }
+
+  .result { margin-top: 18px; color: var(--text); font-size: 14px; }
+
+  .history-section { margin-top: 60px; }
+  .history-section h2 { font-size: 28px; margin-bottom: 10px; }
+  .history-subtitle { color: var(--muted2); margin-bottom: 24px; }
+  .history-container { display: grid; gap: 16px; }
+
+  .history-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); padding: 18px; border-radius: 22px; display: grid; grid-template-columns: 84px 1fr; gap: 16px; align-items: flex-start; }
+  .history-thumbnail { width: 84px; height: 84px; min-width: 84px; border-radius: 20px; overflow: hidden; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; }
+  .history-thumbnail img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .history-thumbnail span { font-size: 32px; }
+  .history-content { display: grid; gap: 10px; }
+  .history-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .history-badge.completed { background: rgba(77,232,180,0.12); color: var(--green); border-radius: 999px; padding: 6px 12px; font-size: 12px; font-weight: 700; }
+  .history-title { font-size: 15px; font-weight: 700; margin: 0; color: var(--text); }
+  .history-url { color: var(--gold2); word-break: break-all; text-decoration: none; font-size: 13px; }
+  .history-detail { color: var(--muted2); font-size: 13px; line-height: 1.4; }
+  .history-details { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 5px; }
+  .history-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .history-download-btn { background: rgba(77,232,180,0.12); border: 1px solid rgba(77,232,180,0.3); border-radius: 14px; color: var(--green); padding: 10px 14px; text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; }
+  .history-delete-btn { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,111,111,0.13); border: 1px solid rgba(232,111,111,0.3); border-radius: 14px; color: var(--red); padding: 10px 14px; cursor: pointer; font-size: 13px; }
+  .history-delete-btn svg { width: 16px; height: 16px; }
+
+  .profile-panel { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 10px 14px; }
+  .profile-panel img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.16); }
+  .profile-meta { display: flex; flex-direction: column; min-width: 0; gap: 2px; }
+  .profile-meta span:first-child { font-size: 13px; font-weight: 700; color: var(--text); }
+  .profile-meta span:nth-child(2) { font-size: 11px; color: var(--muted2); }
+  .profile-plan { font-size: 12px; color: var(--gold2); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .btn-logout { background: rgba(201,168,76,0.14); border: 1px solid rgba(201,168,76,0.25); color: var(--gold2); border-radius: 999px; padding: 9px 16px; cursor: pointer; font-size: 12px; transition: all .2s; }
+  .btn-logout:hover { background: rgba(201,168,76,0.24); border-color: rgba(201,168,76,0.45); }
+
+  .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+  .dash-card { background: rgba(10,15,28,0.85); border: 1px solid rgba(201,168,76,0.15); border-radius: 18px; padding: 28px; backdrop-filter: blur(10px); transition: all .3s; }
+  .dash-card:hover { border-color: rgba(201,168,76,0.35); background: rgba(10,15,28,0.95); }
+  .dash-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .dash-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(201,168,76,0.12); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .dash-title { font-size: 12px; text-transform: uppercase; color: var(--gold); letter-spacing: 1.5px; font-weight: 700; }
+  .dash-value { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .dash-sub { font-size: 13px; color: var(--muted2); }
+  .dash-profile { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .dash-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(201,168,76,0.3); margin-bottom: 12px; }
+  .dash-username { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .dash-status { font-size: 12px; color: var(--muted2); }
+  .dash-action { width: 100%; padding: 12px 18px; background: linear-gradient(135deg, rgba(201,168,76,0.18), rgba(201,168,76,0.08)); border: 1px solid rgba(201,168,76,0.3); color: var(--gold); border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; transition: all .3s; margin-top: 16px; }
+  .dash-action:hover { background: linear-gradient(135deg, rgba(201,168,76,0.28), rgba(201,168,76,0.15)); border-color: rgba(201,168,76,0.5); }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+  .modal-overlay.active { display: flex; }
+  .modal-content { background: rgba(10,15,28,0.98); border: 1px solid rgba(201,168,76,0.2); border-radius: 24px; padding: 40px; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 80px rgba(0,0,0,0.5); }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+  .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; color: var(--text); }
+  .modal-close { background: none; border: none; color: var(--muted2); font-size: 28px; cursor: pointer; transition: color .2s; }
+  .modal-close:hover { color: var(--text); }
+  .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  .pricing-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; text-align: center; transition: all .3s; }
+  .pricing-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(201,168,76,0.3); }
+  .pricing-period { font-size: 12px; text-transform: uppercase; color: var(--muted); letter-spacing: 2px; margin-bottom: 12px; }
+  .pricing-amount { font-size: 48px; font-weight: 700; color: var(--gold2); margin-bottom: 4px; }
+  .pricing-desc { font-size: 13px; color: var(--muted2); margin-bottom: 20px; }
+  .pricing-btn { display: block; width: 100%; padding: 14px 20px; background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #05080f; border: none; border-radius: 12px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all .3s; }
+  .pricing-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(201,168,76,0.25); }
+  .pricing-features { list-style: none; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 20px; }
+  .pricing-features li { font-size: 13px; color: var(--muted2); padding: 8px 0; display: flex; align-items: center; gap: 10px; }
+  .pricing-features li::before { content: '✦'; color: var(--gold); }
+
+  footer { padding: 40px 5%; text-align: center; color: var(--muted); }
+
+  @media(max-width:960px) {
+    .dashboard { grid-template-columns: repeat(2, minmax(240px, 1fr)); }
+    .dash-card { padding: 24px; }
+  }
+
+  @media(max-width:768px) {
+    nav { padding: 0 4%; }
+    .container { padding: 100px 4% 40px; }
+    h1 { font-size: 38px; }
+    .profile-panel { width: auto; justify-content: flex-start; flex-wrap: nowrap; border-radius: 999px; padding: 6px 12px; gap: 8px; }
+    .profile-meta { display: none !important; }
+    .btn-logout { width: auto; }
+    .dashboard { grid-template-columns: 1fr; }
+    .dash-card { padding: 22px; }
+    .dash-header { gap: 10px; }
+    .dash-icon { width: 42px; height: 42px; font-size: 20px; }
+    .dash-value { font-size: 28px; }
+    .dash-sub { font-size: 13px; }
+    .history-item { grid-template-columns: 1fr; padding: 16px; }
+  }
+
+  @media(max-width:560px) {
+    .container { padding: 90px 4% 36px; }
+    nav { height: 60px; padding: 0 4%; flex-wrap: nowrap; gap: 10px; justify-content: space-between; }
+    .logo span { display: none !important; } /* Hide logo text on mobile to avoid overlapping */
+    .nav-end { width: auto; justify-content: flex-end; gap: 8px; flex-wrap: nowrap; }
+    .profile-panel { padding: 4px 8px; gap: 8px; }
+    .btn-back { padding: 8px 16px; font-size: 11px; }
+    .btn-logout { padding: 6px 12px; font-size: 11px; }
+    .dash-card { padding: 20px; }
+    .dashboard { gap: 16px; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .pricing-card { padding: 20px; }
+    .pricing-amount { font-size: 40px; }
+    .pricing-btn { padding: 14px 16px; }
+    .advanced-header, .option-row { flex-direction: column; align-items: stretch; }
+    .player-speed-control { width: 100%; justify-content: flex-start; }
+    .player-speed-control input[type="number"] { width: 100%; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div id="cursor-outer"></div>
+<div id="cursor-inner"></div>
+<canvas id="bg-canvas"></canvas>
+<div class="bg-aurora"></div>
+<div class="grid-lines"></div>
+
+<nav>
+  <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+    <img src="https://i.ibb.co/4ZffCQHF/file-0000000037307207800c1b0df4ef447d.png" style="width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(201, 168, 76, 0.4);" alt="Logo" />
+    <span>Audio Converter</span>
+  </div>
+  <div class="nav-end">
+    <div class="lang-toggle">
+      <button type="button" id="lang-id" class="lang-btn">IN</button>
+      <button type="button" id="lang-en" class="lang-btn active">EN</button>
+    </div>
+    <button class="btn-back" onclick="window.location.href='/'" data-i18n="backButton">Kembali</button>
+    <div class="profile-panel" id="profile-panel" style="display:none;">
+      <img id="profile-avatar" src="" alt="Avatar" />
+      <div class="profile-meta">
+        <span id="profile-username"></span>
+        <span id="profile-tag"></span>
+        <span id="profile-plan" class="profile-plan"></span>
+      </div>
+      <button type="button" class="btn-logout" id="logout-button" data-i18n="logoutButton">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container" id="main-container" style="display: none;">
+  <h1>Audio Converter</h1>
+  <p class="subtitle" data-i18n="subtitle">Sistem converter sama persis seperti index lama. Hanya tampilan, warna, teks, dan efek yang diperbarui.</p>
+
+  <!-- Dashboard Section -->
+  <div class="dashboard" id="dashboard-section" style="display: none;">
+    <!-- Profile Card -->
+    <div class="dash-card dash-profile">
+      <div class="dash-title">Discord Account</div>
+      <img id="dashboard-avatar" class="dash-avatar" src="" alt="Avatar" />
+      <div class="dash-username" id="dashboard-username"></div>
+      <div class="dash-status" id="dashboard-status">Connected</div>
+      <div class="plan-badge free" id="dashboard-plan-badge">Free Plan</div>
+    </div>
+
+    <!-- Stats Card -->
+    <div class="dash-card">
+      <div class="dash-header">
+        <div class="dash-icon">📊</div>
+        <div class="dash-title">This Month</div>
+      </div>
+      <div class="dash-value" id="dashboard-conversions">0</div>
+      <div class="dash-sub">Conversions used</div>
+    </div>
+
+    <!-- Plan Card -->
+    <div class="dash-card">
+      <div class="dash-header">
+        <div class="dash-icon">👑</div>
+        <div class="dash-title">Current Plan</div>
+      </div>
+      <div class="dash-value" id="dashboard-plan">Free</div>
+      <div class="dash-sub" id="dashboard-plan-sub">Unlimited conversions</div>
+      <button type="button" class="dash-action" onclick="openUpgradeModal()" id="upgrade-btn">Upgrade Plan</button>
+    </div>
+
+    <!-- Expiry Card -->
+    <div class="dash-card">
+      <div class="dash-header">
+        <div class="dash-icon">⏳</div>
+        <div class="dash-title">Expiry</div>
+      </div>
+      <div class="dash-value" id="dashboard-expiry-value">-</div>
+      <div class="dash-sub" id="dashboard-expiry-sub">Tidak ada plan aktif</div>
+    </div>
+  </div>
+
+  <!-- Upgrade Modal -->
+  <div class="modal-overlay" id="upgrade-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Choose Your Plan</h2>
+        <button type="button" class="modal-close" onclick="closeUpgradeModal()">×</button>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-period">Per Minggu</div>
+          <div class="pricing-amount">70K</div>
+          <div class="pricing-desc">Indonesian Rupiah</div>
+          <ul class="pricing-features">
+            <li>Konversi unlimited</li>
+            <li>Upload otomatis</li>
+            <li>Kontrol penuh</li>
+            <li>Dukungan prioritas</li>
+          </ul>
+          <button type="button" class="pricing-btn" onclick="selectPlan('premium-week')">Premium 7 Day</button>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-period">Per Bulan</div>
+          <div class="pricing-amount">130K</div>
+          <div class="pricing-desc">Indonesian Rupiah</div>
+          <ul class="pricing-features">
+            <li>Konversi unlimited</li>
+            <li>Upload otomatis</li>
+            <li>Kontrol penuh</li>
+            <li>Dukungan prioritas</li>
+          </ul>
+          <button type="button" class="pricing-btn" onclick="selectPlan('premium-month')">Premium 30 Day</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticket Modal -->
+  <div class="modal-overlay" id="ticket-modal">
+    <div class="modal-content" style="max-width: 500px; text-align: center; background: rgba(10, 15, 28, 0.98); border: 1px solid rgba(201, 168, 76, 0.3);">
+      <div class="modal-header" style="justify-content: flex-end; margin-bottom: 15px;">
+        <button type="button" class="modal-close" onclick="closeTicketModal()">×</button>
+      </div>
+      <div style="font-size: 54px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(201,168,76,0.3));">🎫</div>
+      <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 600; color: var(--gold2); margin-bottom: 16px; letter-spacing: 1.5px; text-transform: uppercase;">Buka Ticket Pembelian</h3>
+      <p style="color: var(--muted2); font-size: 14px; line-height: 1.8; margin-bottom: 30px; max-width: 400px; margin-left: auto; margin-right: auto;">
+        Untuk membeli plan <strong id="selected-plan-name" style="color: var(--text);">Premium</strong>, silakan masuk ke server Discord kami dan buka ticket pada channel pembelian yang tersedia.
+      </p>
+      <a href="https://discord.gg/mMPMyPGq6W" target="_blank" rel="noreferrer" class="pricing-btn" style="text-decoration: none; display: inline-block; width: auto; padding: 14px 40px; border-radius: 999px; font-size: 12px; letter-spacing: 1.5px; font-weight: 700;">
+        Open Ticket on Discord
+      </a>
+    </div>
+  </div>
+
+  <form id="convert-form" class="card">
+    <section class="field-group">
+      <label for="url" data-i18n="urlLabel">URL YouTube atau SoundCloud</label>
+      <input id="url" name="url" type="url" placeholder="Tempel URL YouTube atau SoundCloud..." data-i18n-placeholder="urlPlaceholder" />
+    </section>
+
+    <div id="youtube-preview" class="youtube-preview" style="display:none"></div>
+
+    <div class="divider" data-i18n="divider">ATAU</div>
+
+    <section class="field-group upload-group">
+      <label data-i18n="uploadLabel">Unggah File MP3</label>
+      <div class="drop-zone" id="drop-zone">
+        <input id="file" name="file" type="file" accept="audio/mp3" hidden />
+        <div class="drop-content">
+          <span data-i18n="dropHint">Tarik & lepas file MP3 Anda di sini</span>
+          <button type="button" class="ghost" id="browse-button" data-i18n="browseButton">Telusuri</button>
+          <span class="hint" data-i18n="maxHint">Maks 15MB</span>
+        </div>
+      </div>
+      <div id="file-name" class="file-name" data-i18n="noFile">Belum ada file</div>
+    </section>
+
+    <section class="advanced-card">
+      <div class="advanced-header">
+        <span data-i18n="advancedTitle">Pengaturan Lanjutan</span>
+        <span class="advanced-summary" id="advanced-summary">Speed: 2.5x, Amplify: -6 dB, Max: 400s</span>
+      </div>
+
+      <div class="presets" id="presets"></div>
+
+      <div class="slider-group">
+        <label for="speed"><span data-i18n="speedLabel">Kecepatan</span> <span id="speed-value">2.5x</span></label>
+        <input id="speed" name="speed" type="range" min="1.0" max="3.0" step="0.1" value="2.5" />
+      </div>
+
+      <div class="slider-group">
+        <label for="amplify"><span data-i18n="amplifyLabel">Amplify (dB)</span> <span id="amplify-value">-6 dB</span></label>
+        <input id="amplify" name="amplify" type="range" min="-20" max="6" step="1" value="-6" />
+      </div>
+
+      <div class="slider-group">
+        <label for="maxDuration"><span data-i18n="durationLabel">Durasi Maksimal (detik)</span> <span id="duration-value">400s</span></label>
+        <input id="maxDuration" name="maxDuration" type="range" min="10" max="400" step="10" value="400" />
+        <div style="font-size: 12px; color: var(--muted2); margin-top: 6px; line-height: 1.4;" data-i18n="durationHint">Audio dipotong setiap 400 detik (Part 1: 400s, Part 2: 400s, Part 3+: sisa). Maksimal 400s per bagian.</div>
+      </div>
+
+      <div class="slider-group">
+        <div class="option-row">
+          <label class="toggle-label" for="compensate">
+            <input id="compensate" name="compensate" type="checkbox" />
+            <span data-i18n="compensateLabel">Kompensasi kecepatan pemutar</span>
+          </label>
+          <div class="player-speed-control">
+            <label for="playerSpeed" data-i18n="playerSpeedLabel">Kecepatan Pemutar</label>
+            <input id="playerSpeed" name="playerSpeed" type="number" min="0.05" max="2" step="0.01" value="0.40" />
+            <div id="player-speed-hint" class="player-speed-hint" data-i18n="playerSpeedHint">mis. 0.40</div>
+          </div>
+        </div>
+        <div class="option-row">
+          <label class="toggle-label" for="restoreOriginal">
+            <input id="restoreOriginal" name="restoreOriginal" type="checkbox" checked />
+            <span data-i18n="restoreLabel">Pulihkan suara asli untuk preset speed</span>
+          </label>
+        </div>
+        <div class="restore-note" data-i18n="restoreNote">Wajib aktif: otomatis menyesuaikan player speed sesuai preset agar suara tetap natural.</div>
+      </div>
+    </section>
+
+    <button id="convert-button" type="submit" class="primary" data-i18n="convertButton">Konversi Audio</button>
+    <div id="upgrade-lock-message" class="status error" style="display:none; cursor:pointer; margin-top:1rem;"></div>
+    <div id="status" class="status"></div>
+    <div id="result" class="result"></div>
+  </form>
+
+  <section class="history-section">
+    <h2 data-i18n="historyTitle">RIWAYAT KONVERSI</h2>
+    <p class="history-subtitle" data-i18n="historySubtitle">Lacak semua konversi audio Anda</p>
+    <div id="history-container" class="history-container"></div>
+  </section>
+</div>
+
+<footer>
+  <p data-i18n="footerText">© 2025 V STUDIO Pak_Huang. Semua hak dilindungi.</p>
+</footer>
+
+  <script src="/js/i18n.js"></script>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

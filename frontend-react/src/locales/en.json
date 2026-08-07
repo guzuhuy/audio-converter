@@ -1,0 +1,260 @@
+{
+  "topbar": {
+    "cta": "Start Now",
+    "tagline": "Automated Roblox audio conversion & upload"
+  },
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing Plans",
+    "security": "Security",
+    "converter": "Audio Converter",
+    "upgrade": "Get Premium",
+    "admin": "Admin Panel",
+    "login": "Login with Discord"
+  },
+  "hero": {
+    "title_html": "Convert & Upload Audio to <strong>Roblox</strong> <em>Automatically</em>",
+    "sub": "Grab audio from YouTube & SoundCloud, convert automatically, and upload directly to your Roblox Creator account in seconds.",
+    "start": "Get Started (Free)",
+    "learn": "Learn Features →",
+    "badge": "#1 Roblox Audio Service",
+    "dashboard_cta": "Go to Dashboard",
+    "login_cta": "Start Converting Now",
+    "pricing_cta": "View Pricing Plans"
+  },
+  "stats": {
+    "uploaded": "Audio Uploaded Successfully",
+    "uptime": "System Uptime",
+    "users": "Active Users"
+  },
+  "discord": {
+    "login": "Sign in with Discord"
+  },
+  "plans": {
+    "header": {
+      "title": "Premium Membership Plans",
+      "sub": "Convert and upload unlimited audio to Roblox at affordable prices"
+    },
+    "week": {
+      "title": "7 Days Premium Access",
+      "period": "Per Week",
+      "cta": "Buy Weekly Plan",
+      "cta_acquire": "Select 7 Days Plan"
+    },
+    "month": {
+      "title": "30 Days Premium Access",
+      "period": "Per Month",
+      "cta": "Buy Monthly Plan",
+      "cta_acquire": "Select 30 Days Plan"
+    },
+    "popular": "Most Popular",
+    "features": {
+      "unlimited": "Unlimited audio conversions",
+      "auto_upload": "Automatic upload to Roblox account",
+      "controls": "Speed & volume amplification controls",
+      "moderation": "Monitor moderation status in realtime",
+      "support": "Priority customer support"
+    },
+    "modal_title": "Purchase Premium License",
+    "ticket_title": "Open Purchase Ticket",
+    "ticket_cta": "Contact via Discord",
+    "ticket_desc": "To purchase a premium plan, please join our Discord server and open a ticket in the designated purchase channel.",
+    "ticket_desc_1": "To purchase the plan ",
+    "ticket_desc_2": ", please join our Discord server and open a ticket in the designated purchase channel."
+  },
+  "secure": {
+    "title": "Secure & Trusted",
+    "title_friendly": "Security & Service Performance",
+    "card1_title": "Secure Authentication",
+    "card1_desc": "Secure authorization via Discord OAuth with fully encrypted credential storage.",
+    "card2_title": "HTTPS Encrypted",
+    "card2_desc": "All transcode requests and traffic are transmitted with secure TLS 1.3 encryption.",
+    "card3_title": "Secure Payments",
+    "card3_desc": "Secure payment processing through Midtrans, supporting QRIS and bank transfer.",
+    "footer": "Read our <a href=\"/privacy\">Privacy Policy</a> and <a href=\"/terms\">Terms of Service</a>."
+  },
+  "footer": {
+    "copyright": "© 2025 V STUDIO Pak_Huang. All rights reserved."
+  },
+  "index": {
+    "title": "V STUDIO — Roblox Audio Converter",
+    "url_label": "YouTube or SoundCloud URL",
+    "url_placeholder": "Paste YouTube or SoundCloud link here...",
+    "drag_drop": "Drag & drop your MP3 file here",
+    "browse": "Choose File",
+    "max_file": "Max 15MB",
+    "no_file": "No file selected",
+    "advanced": {
+      "title": "Advanced Settings",
+      "summary": "Speed: 2.5x, Volume: -6 dB, Duration: 400s"
+    },
+    "speed": { "label": "Speed" },
+    "amplify": { "label": "Volume (Amplification)" },
+    "duration": { "label": "Max Duration (Seconds)" },
+    "compensate": { "label": "Compensate for Player Speed" },
+    "player_speed": { "label": "Player Speed (e.g. 0.40)" },
+    "restore": { "label": "Restore original sound for preset speed", "note": "Enable this to automatically adjust player speed to keep audio natural." },
+    "convert_button": "Convert Audio",
+    "history": { "title": "CONVERSION HISTORY", "subtitle": "Track all your audio conversions and uploads" },
+    "footer": { "privacy": "Privacy Policy", "terms": "Terms of Service" }
+  },
+  "converter": {
+    "title": "Audio Converter — V STUDIO",
+    "urlLabel": "YouTube or SoundCloud Link",
+    "urlPlaceholder": "Paste YouTube or SoundCloud link here...",
+    "divider": "OR UPLOAD FILE",
+    "uploadLabel": "Upload MP3 File",
+    "dropHint": "Drag & drop your MP3 file here",
+    "browseButton": "Choose File",
+    "maxHint": "Max 15MB",
+    "noFile": "No file selected",
+    "advancedTitle": "Advanced Settings",
+    "speedLabel": "Audio Speed",
+    "amplifyLabel": "Volume (Amplification dB)",
+    "durationLabel": "Max Duration (Seconds)",
+    "durationHint": "Audio will be automatically split every 400 seconds for easy uploading.",
+    "compensateLabel": "Compensate for player speed",
+    "playerSpeedLabel": "Player Speed",
+    "playerSpeedHint": "e.g. 0.40",
+    "restoreLabel": "Restore original sound for preset speed",
+    "restoreNote": "Enable this to automatically adjust player speed to keep audio natural.",
+    "convertButton": "Start Conversion",
+    "historyTitle": "Your Conversion History",
+    "historySubtitle": "List of recently converted audio files (files are stored temporarily for 10 minutes)",
+    "footerText": "© 2025 V STUDIO Pak_Huang. All rights reserved.",
+    "backButton": "Back",
+    "logoutButton": "Logout",
+    "active_session": "Active Session",
+    "connected": "Connected",
+    "plan_free": "Free Plan",
+    "plan_premium": "Premium Plan",
+    "transcode_stats": "Conversion Stats",
+    "system_license": "Your Plan",
+    "cooldown_telemetry": "Cooldown Timer",
+    "ready": "Ready to Use",
+    "unlimited": "Unlimited",
+    "loading_metadata": "Retrieving audio info...",
+    "or_upload_file": "Or upload an audio file from your computer",
+    "no_file_selected": "No file selected",
+    "success_msg": "Audio conversion successful!",
+    "links_saved_msg": "Download links have been added to the history below.",
+    "uploading": "Uploading file...",
+    "processing": "Processing...",
+    "preset_slow": "Very Slow",
+    "preset_default": "Slow",
+    "preset_fast": "Normal",
+    "preset_faster": "Fast",
+    "preset_ultra": "Very Fast"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "login_help": "Sign in as admin to view users and manage plans.",
+    "detect_discord": "Detect Discord ID (make sure you are logged in first)",
+    "username_placeholder": "Username",
+    "password_placeholder": "Password",
+    "login_button": "Login",
+    "plan_help": "Choose the appropriate plan for this user, then click Save.",
+    "logout_button": "Logout Admin",
+    "users_title": "Discord Users Registry",
+    "table": {
+      "user_id": "Discord ID",
+      "plan": "Plan",
+      "expiry": "Expiry",
+      "status": "Status",
+      "conversions": "Conversions (This Month)",
+      "last_conversion": "Last Conversion",
+      "action": "Action"
+    }
+  },
+  "join": {
+    "title": "Join Our Discord Community",
+    "note": "You must join our Discord server to use this converter. Please click the invite button below, then verify your membership.",
+    "invite": "Join Discord Server",
+    "verify": "I Have Joined - Verify"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "section": {
+      "information": {
+        "title": "Information We Collect",
+        "item1": "Discord account information (username, email, avatar) via OAuth",
+        "item2": "Roblox account credentials (User ID, API Key) that you provide",
+        "item3": "Audio conversion history and upload preferences",
+        "item4": "Payment information processed securely through Midtrans"
+      },
+      "usage": {
+        "title": "How We Use Your Information",
+        "item1": "To authenticate your account via Discord OAuth",
+        "item2": "To convert and upload audio files to your Roblox account",
+        "item3": "To process subscription payments",
+        "item4": "To provide customer support"
+      },
+      "storage": {
+        "title": "Data Storage & Security",
+        "text": "Your data is stored securely using encrypted database connections, AES-256 for credentials, Cloudflare R2 for files, and HTTPS."
+      },
+      "third_party": {
+        "title": "Third-Party Services",
+        "text": "Discord, Roblox, Midtrans, MongoDB Atlas, Cloudflare."
+      },
+      "rights": {
+        "title": "Your Rights",
+        "text": "Access, delete, unlink Roblox accounts, cancel subscriptions, export history."
+      },
+      "contact": {
+        "title": "Contact",
+        "text": "Discord: <a href=\"https://discord.gg/mMPMyPGq6W\">Join our server</a>"
+      }
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "section": {
+      "acceptance": {
+        "title": "Acceptance of Terms",
+        "text": "By accessing V STUDIO PakHuang, you agree to these terms. If you disagree, please do not use our service."
+      },
+      "description": {
+        "title": "Service Description",
+        "item1": "Audio conversion from YouTube and SoundCloud",
+        "item2": "Automatic upload to Roblox via official Open Cloud API",
+        "item3": "Subscription-based access to premium features"
+      },
+      "responsibilities": {
+        "title": "User Responsibilities",
+        "item1": "Only convert and upload content you have rights to use",
+        "item2": "Comply with Roblox Terms of Service and Community Standards",
+        "item3": "Keep your Roblox API credentials secure and private"
+      },
+      "payments": {
+        "title": "Subscriptions & Payments",
+        "text": "Subscriptions billed via Midtrans. No automatic refunds for partial usage. Cancel anytime from dashboard."
+      },
+      "availability": {
+        "title": "Service Availability & Liability",
+        "text": "We strive for 99% uptime but do not guarantee. We are not liable for third-party failures or policy changes."
+      },
+      "termination": {
+        "title": "Account Termination",
+        "text": "We can suspend or terminate accounts that violate terms, abuse API limits, or engage in fraud."
+      },
+      "contact": {
+        "title": "Contact",
+        "text": "Discord: <a href=\"https://discord.gg/mMPMyPGq6W\">Join our server</a>"
+      }
+    }
+  },
+  "test": {
+    "title": "Test Page",
+    "heading": "Server is working!",
+    "message": "This is a test page."
+  },
+  "claim_free_premium": {
+    "title": "Welcome Gift! 🎁",
+    "desc": "Claim 1-Day of Premium subscription for free! Enjoy unlimited conversion duration, volume boost, speed adjustment, and direct Roblox auto-upload.",
+    "btn_claim": "Claim 1-Day Premium Now",
+    "btn_close": "Maybe Later",
+    "success": "Congratulations! Your 1-Day Premium plan is now active.",
+    "error": "Failed to claim free premium plan. Please try again later."
+  }
+}
