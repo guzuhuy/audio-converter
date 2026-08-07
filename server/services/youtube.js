@@ -1,8 +1,28 @@
 const ytdlpExec = require('yt-dlp-exec');
-const isAndroid = process.platform === 'android' || (process.env.PREFIX && process.env.PREFIX.includes('com.termux'));
-const ytdlp = isAndroid ? ytdlpExec.create('yt-dlp') : ytdlpExec;
 const fs = require('fs');
 const path = require('path');
+
+const isAndroid = process.platform === 'android' || (process.env.PREFIX && process.env.PREFIX.includes('com.termux'));
+
+let ytdlpBinary = undefined;
+if (isAndroid) {
+  ytdlpBinary = '/data/data/com.termux/files/usr/bin/yt-dlp';
+  if (!fs.existsSync(ytdlpBinary)) {
+    try {
+      const { execSync } = require('child_process');
+      const resolved = execSync('which yt-dlp', { encoding: 'utf-8' }).trim();
+      if (resolved && fs.existsSync(resolved)) {
+        ytdlpBinary = resolved;
+      } else {
+        ytdlpBinary = 'yt-dlp';
+      }
+    } catch (e) {
+      ytdlpBinary = 'yt-dlp';
+    }
+  }
+}
+
+const ytdlp = ytdlpBinary ? ytdlpExec.create(ytdlpBinary) : ytdlpExec;
 
 const defaultFfmpegPath = path.join('C:', 'ffmpeg-master-latest-win64-gpl-shared', 'bin', 'ffmpeg.exe');
 
@@ -77,7 +97,7 @@ async function downloadAudio(url, output) {
     jsRuntimes: 'node',
     noPlaylist: true
   };
-  if (ffmpegLocation) {
+  if (ffmpegLocation && ffmpegLocation !== 'ffmpeg') {
     ytdlpOptions.ffmpegLocation = ffmpegLocation;
   }
 
@@ -98,7 +118,7 @@ async function getYoutubeMetadata(url) {
     jsRuntimes: 'node',
     noPlaylist: true
   };
-  if (ffmpegLocation) {
+  if (ffmpegLocation && ffmpegLocation !== 'ffmpeg') {
     ytdlpOptions.ffmpegLocation = ffmpegLocation;
   }
   const raw = await ytdlp(url, ytdlpOptions);
